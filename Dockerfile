@@ -22,7 +22,11 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
+# إنشاء مجلد database وملف sqlite فارغ ومنحه الصلاحيات
+RUN mkdir -p /var/www/html/database && \
+    touch /var/www/html/database/database.sqlite && \
+    chown -R www-data:www-data /var/www/html/database && \
+    chmod -R 775 /var/www/html/database
 # تحديد مجلد العمل
 WORKDIR /var/www/html
 
