@@ -48,4 +48,4 @@ COPY .render/apache.conf /etc/apache2/sites-available/000-default.conf
 EXPOSE 80
 
 # أمر التشغيل الديناميكي لتنظيف الكاش، تطبيق الجداول، ثم تشغيل خادم الويب
-CMD ["sh", "-c", "php artisan config:clear && php artisan cache:clear && php artisan migrate --force && apache2-foreground"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan config:clear && php artisan cache:clear && apache2-foreground"]
