@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/setup-system', function () {
 
     Artisan::call('migrate:fresh', [
@@ -19,3 +21,4 @@ Route::get('/setup-system', function () {
         'success' => true,
         'message' => 'System initialized successfully'
     ]);
+}
