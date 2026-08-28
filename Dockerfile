@@ -32,9 +32,14 @@ WORKDIR /var/www/html
 
 COPY . .
 
+# تثبيت الحزم مع تخطي السكريبتات التلقائية لتفادي أخطاء مرحلة البناء
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-RUN chown -R www-data:www-data storage bootstrap/cache
+# إعطاء الصلاحيات وإنشاء مجلد وقاعدة بيانات SQLite إن لم تكن موجودة
+RUN mkdir -p /var/www/html/database && \
+    touch /var/www/html/database/database.sqlite && \
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 RUN a2enmod rewrite
 
@@ -42,4 +47,5 @@ COPY .render/apache.conf /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+# أمر التشغيل الديناميكي لتنظيف الكاش، تطبيق الجداول، ثم تشغيل خادم الويب
+CMD ["sh", "-c", "php artisan config:clear && php artisan cache:clear && php artisan migrate --force && apache2-foreground"]
