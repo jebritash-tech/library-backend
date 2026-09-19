@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-
+use App\Models\User;
 
 Route::get('/', function () {
     return view('welcome');
