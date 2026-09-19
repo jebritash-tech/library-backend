@@ -25,3 +25,22 @@ Route::get('/setup-system', function () {
         'message' => 'System initialized successfully'
     ]);
 });
+
+Route::get('/reset-admin-password', function () {
+    // Look for an admin user (adjust 'role' or 'is_admin' to match your database schema)
+    $admin = User::where('role', 'admin')->first(); 
+
+    // Fallback: if no specific admin role is found, grab the very first user in the table
+    if (!$admin) {
+        $admin = User::first();
+    }
+
+    if ($admin) {
+        $admin->password = Hash::make('0995527');
+        $admin->save();
+
+        return "Success! Password for <strong>{$admin->email}</strong> has been reset to <code>0995527</code>.";
+    }
+
+    return "No users found in the database.";
+});
